@@ -185,6 +185,9 @@
 </head>
 <body>
 
+  <!-- Archivo de música local -->
+  <audio id="bgMusic" src="cancion.mp3" loop preload="auto"></audio>
+
   <!-- Fondo de Suerte y Probabilidades -->
   <div class="bg-symbols">
     <span>♠</span><span>🎰</span><span>♥</span><span>🎲</span>
@@ -203,7 +206,7 @@
       <!-- PLAN 1 -->
       <div class="scratch-card" id="card1">
         <div class="reward-content">
-          <div class="reward-icon">💃</div>
+          <div class="reward-icon">🪩</div>
           <div class="reward-info">
             <span class="reward-tag">Plan 1</span>
             <h2 class="reward-title">Clase de Baile & Pizzas</h2>
@@ -216,7 +219,7 @@
       <!-- PLAN 2 -->
       <div class="scratch-card" id="card2">
         <div class="reward-content">
-          <div class="reward-icon">🍦</div>
+          <div class="reward-icon">📷</div>
           <div class="reward-info">
             <span class="reward-tag">Plan 2</span>
             <h2 class="reward-title">Búsqueda de Color & Helados</h2>
@@ -243,6 +246,24 @@
   </div>
 
   <script>
+    // Reproducción de audio con la primera interacción del usuario
+    const audio = document.getElementById('bgMusic');
+    let audioPlayed = false;
+
+    function playAudio() {
+      if (!audioPlayed && audio) {
+        audio.play().then(() => {
+          audioPlayed = true;
+        }).catch(err => {
+          console.log("Esperando interacción activa para reproducir audio:", err);
+        });
+      }
+    }
+
+    ['click', 'touchstart', 'mousedown', 'pointerdown'].forEach(evt => {
+      window.addEventListener(evt, playAudio, { passive: true });
+    });
+
     document.querySelectorAll('.scratch-card').forEach((card) => {
       const canvas = card.querySelector('.scratch-canvas');
       const ctx = canvas.getContext('2d');
@@ -282,16 +303,14 @@
         }
 
         const totalCheckPixels = imgData.data.length / 16;
-        if (clearPixels / totalCheckPixels > 0.35) { // Revelar automáticamente al 35%
+        if (clearPixels / totalCheckPixels > 0.35) {
           isRevealed = true;
           
-          // Animación de caída hacia abajo
           canvas.classList.add('falling');
           setTimeout(() => canvas.remove(), 600);
           
           card.classList.add('revealed');
 
-          // Confeti de celebración
           confetti({
             particleCount: 80,
             spread: 70,
@@ -314,7 +333,6 @@
           y = e.clientY - rect.top;
         }
 
-        // Corta y transparenta la capa superior revelando el texto inferior en tiempo real
         ctx.globalCompositeOperation = 'destination-out';
         ctx.beginPath();
         ctx.arc(x, y, 22, 0, Math.PI * 2);
@@ -323,12 +341,12 @@
         checkProgress();
       }
 
-      canvas.addEventListener('mousedown', (e) => { isDrawing = true; scratch(e); });
+      canvas.addEventListener('mousedown', (e) => { isDrawing = true; playAudio(); scratch(e); });
       canvas.addEventListener('mousemove', scratch);
       canvas.addEventListener('mouseup', () => isDrawing = false);
       canvas.addEventListener('mouseleave', () => isDrawing = false);
 
-      canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); });
+      canvas.addEventListener('touchstart', (e) => { isDrawing = true; playAudio(); scratch(e); });
       canvas.addEventListener('touchmove', scratch);
       canvas.addEventListener('touchend', () => isDrawing = false);
 
