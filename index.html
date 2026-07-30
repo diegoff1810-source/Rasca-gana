@@ -31,7 +31,7 @@
       overflow-x: hidden;
     }
 
-    /* Fondo temático de suerte / casino / cartas */
+    /* Fondo temático */
     .bg-symbols {
       position: fixed;
       top: 0;
@@ -108,7 +108,7 @@
       100% { transform: scale(1.02); }
     }
 
-    /* Contenido oculto */
+    /* Contenido oculto (revelado) */
     .reward-content {
       position: absolute;
       top: 0;
@@ -175,18 +175,15 @@
       transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
     }
 
-    /* Animación de caída al raspar */
+    /* Animación de caída al raspar completamente */
     canvas.falling {
-      transform: translateY(120px) rotate(15deg) scale(0.9);
+      transform: translateY(140px) rotate(12deg) scale(0.9);
       opacity: 0;
       pointer-events: none;
     }
   </style>
 </head>
 <body>
-
-  <!-- Música de fondo incorporada -->
-  <audio id="bgMusic" src="data:audio/mp3;base64,SUQ3BAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//7A4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA..." autoplay loop></audio>
 
   <!-- Fondo de Suerte y Probabilidades -->
   <div class="bg-symbols">
@@ -198,7 +195,7 @@
   <div class="container">
     <div class="header-text">
       <h1>¿Qué hacemos hoy?</h1>
-      <p>Raspa una de las opciones para descubrir nuestro plan</p>
+      <p>Raspa una de las opciones</p>
     </div>
 
     <div class="cards-grid">
@@ -209,11 +206,11 @@
           <div class="reward-icon">💃</div>
           <div class="reward-info">
             <span class="reward-tag">Plan 1</span>
-            <h2 class="reward-title">Clase de Baile</h2>
-            <p class="reward-desc">Aprender nuevos pasos y divertirnos bailando juntos.</p>
+            <h2 class="reward-title">Clase de baile</h2>
+            <p class="reward-desc">Tomar una clase de baile juntos y aprender nuevos pasos.</p>
           </div>
         </div>
-        <canvas class="scratch-canvas" data-label="PLAN 1"></canvas>
+        <canvas class="scratch-canvas" data-label="Plan 1"></canvas>
       </div>
 
       <!-- PLAN 2 -->
@@ -222,36 +219,30 @@
           <div class="reward-icon">🎨</div>
           <div class="reward-info">
             <span class="reward-tag">Plan 2</span>
-            <h2 class="reward-title">Caza de Color</h2>
-            <p class="reward-desc">Escoger un color y salir a buscarlo por toda la ciudad.</p>
+            <h2 class="reward-title">Búsqueda de color</h2>
+            <p class="reward-desc">Escoger un color y salir a buscarlos por la ciudad.</p>
           </div>
         </div>
-        <canvas class="scratch-canvas" data-label="PLAN 2"></canvas>
+        <canvas class="scratch-canvas" data-label="Plan 2"></canvas>
       </div>
 
       <!-- PLAN 3 -->
       <div class="scratch-card" id="card3">
         <div class="reward-content">
-          <div class="reward-icon">🛍️</div>
+          <div class="reward-icon">🧋</div>
           <div class="reward-info">
             <span class="reward-tag">Plan 3</span>
             <h2 class="reward-title">Goncha & Compras</h2>
-            <p class="reward-desc">Unos ricos Goncha y tour de compras por las tiendas.</p>
+            <p class="reward-desc">Goncha y compras en tiendas.</p>
           </div>
         </div>
-        <canvas class="scratch-canvas" data-label="PLAN 3"></canvas>
+        <canvas class="scratch-canvas" data-label="Plan 3"></canvas>
       </div>
 
     </div>
   </div>
 
   <script>
-    // Reproducir audio al primer clic/toque
-    document.body.addEventListener('click', () => {
-      const audio = document.getElementById('bgMusic');
-      if (audio.paused) audio.play();
-    }, { once: true });
-
     document.querySelectorAll('.scratch-card').forEach((card) => {
       const canvas = card.querySelector('.scratch-canvas');
       const ctx = canvas.getContext('2d');
@@ -263,7 +254,7 @@
         canvas.width = card.offsetWidth;
         canvas.height = card.offsetHeight;
 
-        // Capa plateada metalizada
+        // Capa plateada metalizada brillante
         const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
         gradient.addColorStop(0, '#b8c6db');
         gradient.addColorStop(0.5, '#f5f7fa');
@@ -272,14 +263,13 @@
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Texto frontal
-        ctx.fillStyle = '#333333';
-        ctx.font = 'bold 13px "Plus Jakarta Sans", sans-serif';
+        // Texto frontal: SOLO "Plan 1", "Plan 2" o "Plan 3"
+        ctx.fillStyle = '#222222';
+        ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText(`RASPA AQUÍ (${label})`, canvas.width / 2, canvas.height / 2 + 5);
+        ctx.textBaseline = 'middle';
+        ctx.fillText(label, canvas.width / 2, canvas.height / 2);
       }
-
-      ctx.globalCompositeOperation = 'destination-out';
 
       function checkProgress() {
         if (isRevealed) return;
@@ -292,7 +282,7 @@
         }
 
         const totalCheckPixels = imgData.data.length / 16;
-        if (clearPixels / totalCheckPixels > 0.40) { // Revelar automáticamente al 40%
+        if (clearPixels / totalCheckPixels > 0.35) { // Revelar automáticamente al 35%
           isRevealed = true;
           
           // Animación de caída hacia abajo
@@ -301,7 +291,7 @@
           
           card.classList.add('revealed');
 
-          // Animación de confeti de victoria
+          // Animación de confeti
           confetti({
             particleCount: 80,
             spread: 70,
@@ -324,8 +314,10 @@
           y = e.clientY - rect.top;
         }
 
+        // Usamos destination-out para borrar la capa plateada conforme raspa
+        ctx.globalCompositeOperation = 'destination-out';
         ctx.beginPath();
-        ctx.arc(x, y, 24, 0, Math.PI * 2);
+        ctx.arc(x, y, 22, 0, Math.PI * 2);
         ctx.fill();
 
         checkProgress();
