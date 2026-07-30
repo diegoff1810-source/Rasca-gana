@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Elige Nuestra Cita</title>
+  <title>Elige Nuestra Cita 🎲</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -108,7 +108,7 @@
       100% { transform: scale(1.02); }
     }
 
-    /* Contenido oculto (revelado) */
+    /* Contenido oculto */
     .reward-content {
       position: absolute;
       top: 0;
@@ -206,8 +206,8 @@
           <div class="reward-icon">💃</div>
           <div class="reward-info">
             <span class="reward-tag">Plan 1</span>
-            <h2 class="reward-title">Clase de baile</h2>
-            <p class="reward-desc">Tomar una clase de baile juntos y aprender nuevos pasos.</p>
+            <h2 class="reward-title">Clase de Baile & Pizzas</h2>
+            <p class="reward-desc">Pasamos a tomar una clase de baile y saliendo comemos una pizza juntos.</p>
           </div>
         </div>
         <canvas class="scratch-canvas" data-label="Plan 1"></canvas>
@@ -216,11 +216,11 @@
       <!-- PLAN 2 -->
       <div class="scratch-card" id="card2">
         <div class="reward-content">
-          <div class="reward-icon">🎨</div>
+          <div class="reward-icon">🍦</div>
           <div class="reward-info">
             <span class="reward-tag">Plan 2</span>
-            <h2 class="reward-title">Búsqueda de color</h2>
-            <p class="reward-desc">Escoger un color y salir a buscarlos por la ciudad.</p>
+            <h2 class="reward-title">Búsqueda de Color & Helados</h2>
+            <p class="reward-desc">Seleccionamos un color al azar y salimos a buscarlos por la ciudad para tomarles fotos. Terminando pasamos por unos helados.</p>
           </div>
         </div>
         <canvas class="scratch-canvas" data-label="Plan 2"></canvas>
@@ -232,8 +232,8 @@
           <div class="reward-icon">🧋</div>
           <div class="reward-info">
             <span class="reward-tag">Plan 3</span>
-            <h2 class="reward-title">Goncha & Compras</h2>
-            <p class="reward-desc">Goncha y compras en tiendas.</p>
+            <h2 class="reward-title">Compras & Goncha</h2>
+            <p class="reward-desc">Vamos de compras y aprovechando pasamos por un Goncha.</p>
           </div>
         </div>
         <canvas class="scratch-canvas" data-label="Plan 3"></canvas>
@@ -263,7 +263,7 @@
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Texto frontal: SOLO "Plan 1", "Plan 2" o "Plan 3"
+        // Texto frontal: "Plan 1", "Plan 2" o "Plan 3"
         ctx.fillStyle = '#222222';
         ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
         ctx.textAlign = 'center';
@@ -291,7 +291,7 @@
           
           card.classList.add('revealed');
 
-          // Animación de confeti
+          // Confeti de celebración
           confetti({
             particleCount: 80,
             spread: 70,
@@ -314,7 +314,7 @@
           y = e.clientY - rect.top;
         }
 
-        // Usamos destination-out para borrar la capa plateada conforme raspa
+        // Corta y transparenta la capa superior revelando el texto inferior en tiempo real
         ctx.globalCompositeOperation = 'destination-out';
         ctx.beginPath();
         ctx.arc(x, y, 22, 0, Math.PI * 2);
