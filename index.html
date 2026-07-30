@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Elige Nuestra Cita 🎲</title>
+  <title>Elige Nuestra Cita</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -172,14 +172,21 @@
       cursor: pointer;
       touch-action: none;
       z-index: 2;
-      transition: opacity 0.5s ease;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
+    }
+
+    /* Animación de caída al raspar */
+    canvas.falling {
+      transform: translateY(120px) rotate(15deg) scale(0.9);
+      opacity: 0;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
 
-  <!-- Música de fondo automática -->
-  <audio id="bgMusic" src="cancion.mp3" autoplay loop></audio>
+  <!-- Música de fondo incorporada -->
+  <audio id="bgMusic" src="data:audio/mp3;base64,SUQ3BAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//7A4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA..." autoplay loop></audio>
 
   <!-- Fondo de Suerte y Probabilidades -->
   <div class="bg-symbols">
@@ -190,7 +197,7 @@
 
   <div class="container">
     <div class="header-text">
-      <h1>¿Qué hacemos hoy? 🎲</h1>
+      <h1>¿Qué hacemos hoy?</h1>
       <p>Raspa una de las opciones para descubrir nuestro plan</p>
     </div>
 
@@ -199,40 +206,40 @@
       <!-- PLAN 1 -->
       <div class="scratch-card" id="card1">
         <div class="reward-content">
-          <div class="reward-icon">🎨</div>
+          <div class="reward-icon">💃</div>
           <div class="reward-info">
-            <span class="reward-tag">Plan 1 (Activo)</span>
-            <h2 class="reward-title">Cita en el Museo & Boliche</h2>
-            <p class="reward-desc">Recorrido por el Soumaya / Jumex + retia divertida de boliche.</p>
+            <span class="reward-tag">Plan 1</span>
+            <h2 class="reward-title">Clase de Baile</h2>
+            <p class="reward-desc">Aprender nuevos pasos y divertirnos bailando juntos.</p>
           </div>
         </div>
-        <canvas class="scratch-canvas" data-label="PLAN 1 (ACTIVO)"></canvas>
+        <canvas class="scratch-canvas" data-label="PLAN 1"></canvas>
       </div>
 
       <!-- PLAN 2 -->
       <div class="scratch-card" id="card2">
         <div class="reward-content">
-          <div class="reward-icon">☕</div>
+          <div class="reward-icon">🎨</div>
           <div class="reward-info">
-            <span class="reward-tag">Plan 2 (Ir a...)</span>
-            <h2 class="reward-title">Picnic & Coyoacán</h2>
-            <p class="reward-desc">Tardecita de cafea en la Cineteca y caminata por los callejones.</p>
+            <span class="reward-tag">Plan 2</span>
+            <h2 class="reward-title">Caza de Color</h2>
+            <p class="reward-desc">Escoger un color y salir a buscarlo por toda la ciudad.</p>
           </div>
         </div>
-        <canvas class="scratch-canvas" data-label="PLAN 2 (IR A...)"></canvas>
+        <canvas class="scratch-canvas" data-label="PLAN 2"></canvas>
       </div>
 
       <!-- PLAN 3 -->
       <div class="scratch-card" id="card3">
         <div class="reward-content">
-          <div class="reward-icon">🍿</div>
+          <div class="reward-icon">🛍️</div>
           <div class="reward-info">
-            <span class="reward-tag">Plan 3 (Relax)</span>
-            <h2 class="reward-title">Cena & Maratón en Casa</h2>
-            <p class="reward-desc">Pedimos algo delicioso, mascarillas y maratón de películas juntas.</p>
+            <span class="reward-tag">Plan 3</span>
+            <h2 class="reward-title">Goncha & Compras</h2>
+            <p class="reward-desc">Unos ricos Goncha y tour de compras por las tiendas.</p>
           </div>
         </div>
-        <canvas class="scratch-canvas" data-label="PLAN 3 (RELAX)"></canvas>
+        <canvas class="scratch-canvas" data-label="PLAN 3"></canvas>
       </div>
 
     </div>
@@ -285,10 +292,13 @@
         }
 
         const totalCheckPixels = imgData.data.length / 16;
-        if (clearPixels / totalCheckPixels > 0.45) { // Revelar automáticamente al 45%
+        if (clearPixels / totalCheckPixels > 0.40) { // Revelar automáticamente al 40%
           isRevealed = true;
-          canvas.style.opacity = '0';
-          setTimeout(() => canvas.remove(), 500);
+          
+          // Animación de caída hacia abajo
+          canvas.classList.add('falling');
+          setTimeout(() => canvas.remove(), 600);
+          
           card.classList.add('revealed');
 
           // Animación de confeti de victoria
